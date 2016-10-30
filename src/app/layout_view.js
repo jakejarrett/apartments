@@ -1,4 +1,4 @@
-import * as Marionette from "marionette";
+import Marionette from "marionette";
 import _ from "underscore";
 import Template from "./layout-template.html";
 

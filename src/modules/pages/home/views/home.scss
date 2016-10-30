@@ -12,4 +12,11 @@
     /** Autoprefixer will append prefixes for us to support ie. **/
     display: flex;
   }
+
+  input {
+    &.form-control {
+      margin: 50px 8px;
+      width: calc(100% - 19px)
+    }
+  }
 }

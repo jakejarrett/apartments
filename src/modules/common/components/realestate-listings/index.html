@@ -1,0 +1,21 @@
+<% _.each(properties, function(property, key) { %>
+    <%
+        var price;
+        if(property.price && property.price.display) {
+            price = property.price.display;
+        } else {
+            price = "N/A";
+        }
+    %>
+    <div class="md-card md-card--big">
+        <div style="background-image: url(<%- property.mainImage.server + '/800x600' + property.mainImage.uri %>)" class="md-card__image"></div>
+        <h2 class="md-card__title"><%- property.title %></h2><span class="md-card__subtitle">Price: <%- price %></span>
+        <p class="md-card__text">
+            <i class="fa fa-map-marker" aria-hidden="true"></i> <%- property.address.locality %>
+        </p>
+        <div class="md-card__action-bar">
+            <button class="md-card__button">SHARE</button>
+            <button class="md-card__button md-card__learnMore" onclick="this.parentNode.parentNode.classList.toggle('md-card--expanded')">LEARN MORE</button>
+        </div>
+    </div>
+<% }); %>

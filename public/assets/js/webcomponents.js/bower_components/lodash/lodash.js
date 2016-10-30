@@ -1592,7 +1592,7 @@
     }
 
     /**
-     * The base implementation of `_.at` without support for string collections
+     * The base implementation of `_.at` without support for string models
      * and individual key arguments.
      *
      * @private

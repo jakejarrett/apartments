@@ -68,7 +68,7 @@ export function template(value, model) {
      * Return a decorator function
      */
     return function decorator(target) {
-        target.prototype.template = _.template(value, model);
+        target.prototype.template = _.template(value);
     };
 }
 
@@ -156,5 +156,27 @@ export function attribute(attribute, value) {
      */
     return function decorator(target) {
         target.prototype[attribute] = value;
+    };
+}
+
+/**
+ * Model Events decorator
+ *
+ * This provides a decorator for the any module to add in properties/attributes on the root.
+ *
+ * @param attribute {String} The attribute/property you wish to apply.
+ * @param value {String} The initial value of the property/attribute.
+ * @returns {Function} The active decorator
+ */
+export function modelEvents(attribute, value) {
+    /**
+     * Return a decorator function
+     */
+    return function decorator(target) {
+        if(!target.prototype.modelEvents) {
+            target.prototype.modelEvents = {};
+        }
+
+        target.prototype.modelEvents[attribute] = value;
     };
 }

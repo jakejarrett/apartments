@@ -1,9 +1,9 @@
 import App from "app/app";
 import { View } from "marionette";
 import NavigationView from "modules/common/views/navigation/navigation";
-import {attribute, className, tagName, template, on} from "modules/common/controllers/decorators";
-import DemoComponent from "modules/common/components/demo-component";
-import LoginComponent from "modules/common/components/login-component";
+import {attribute, className, tagName, template, on, modelEvents} from "modules/common/controllers/decorators";
+import RealEstateModel from "modules/common/models/realestate-collection";
+import RealEstateListingsComponent from "modules/common/components/realestate-listings";
 import Template from "./home.html";
 import "./home.scss";
 
@@ -14,13 +14,19 @@ import "./home.scss";
  * @exports HomeView
  */
 @className("home")
-@template(Template)
+@template(Template, {})
 @attribute("components", {})
 @attribute("componentChannels", {})
+@modelEvents("sync", "updateView")
 class HomeView extends View {
 
-    constructor () {
-        super();
+    templateContext () {
+        const that = this;
+
+        return {
+            results: that.model.get("results"),
+            channel: that.model.get("channel")
+        }
     }
 
     /**
@@ -28,43 +34,60 @@ class HomeView extends View {
      * (This won't preserve state)
      */
     initialize () {
-        var that = this;
-        if (module.hot) {
-            /** Require the template & re-render :) **/
-            module.hot.accept("./home.html", (res) => {
-                that.$el.find("#content-container").html(_.template(require("./home.html")));
-            });
-
-            module.hot.accept("modules/common/components/login-component", elem => that.components["login-component"].updateElement());
-        }
-    }
-
-    /**
-     * On render, we want to add the navigation
-     *
-     * @protected
-     */
-    onRender () {
-        let Navigation =  new NavigationView();
+        let that = this;
+        let Navigation = new NavigationView();
         App.getNavigationContainer().show(Navigation);
         Navigation.setItemAsActive("home");
 
+        let query = {
+            channel: "rent",
+            filters: {
+                surroundingSuburbs: true,
+                excludeTier2: true,
+                geoPrecision: "address",
+                excludeAddressHidden: "true",
+                localities: [
+                    {
+                        searchLocation: "Melbourne, VIC 3000"
+                    },
+                    {
+                        searchLocation: "Brunswick, VIC 3056"
+                    },
+                    {
+                        searchLocation: "Richmond, VIC 3121"
+                    }
+                ]
+            },
+            pageSize: 20
+        };
+
+        this.model = new RealEstateModel();
+        this.fetch(query);
+    }
+
+    onRender () {
         this.setupComponents();
-        this.setupComponentEventListeners();
+    }
+
+    /**
+     * We don't want a full re-render when the model is updated
+     *
+     * @protected
+     */
+    updateView () {
+        this.setupComponents();
     }
 
     setupComponents () {
         let $componentContainer = this.$el.find("#component-container");
+        let results = this.model.get("results");
 
-        this.registerComponent("demo-component", DemoComponent, $componentContainer);
-        this.registerComponent("login-component", LoginComponent, $componentContainer);
-    }
+        if(undefined === results) return;
 
-    setupComponentEventListeners () {
-        /** We can listen to events emitted by the component. **/
-        this.componentChannels["login-component"].on("stateChange", stateChange => {
-            console.log(`New state ${stateChange}`)
-        });
+
+        this.registerComponent(`realestate-result`, RealEstateListingsComponent, $componentContainer, results);
+
+        this.components["realestate-result"].module.update(results)
     }
 
     /**
@@ -82,10 +105,49 @@ class HomeView extends View {
         let componentObject = Component.getComponent(componentName);
 
         /** Store references to the component & radio channels **/
-        this.components[componentObject.elementName] = componentObject.component;
+        this.components[componentObject.elementName] = {
+            element: componentObject.component,
+            module: componentObject.componentModule
+        };
+
         this.componentChannels[componentObject.elementName] = componentObject.radioChannel || {};
 
         el.append(componentObject.component);
+    }
+
+    fetch (data) {
+        let strQuery = JSON.stringify(data);
+
+        this.model.fetch({
+            data: { query: strQuery }
+        });
+    }
+
+    @on("change [name='suburb']")
+    onChangeSuburb (event) {
+        event.preventDefault();
+        let val = event.currentTarget.value;
+
+
+        let query = {
+            channel: "rent",
+            filters: {
+                surroundingSuburbs: true,
+                excludeTier2: true,
+                geoPrecision: "address",
+                excludeAddressHidden: "true",
+                localities: [
+                    {
+                        searchLocation: val
+                    }
+                ]
+            },
+            pageSize: 20
+        };
+
+        this.fetch(query);
+
+
     }
 }
 

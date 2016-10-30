@@ -136,7 +136,7 @@ app.get(serverSideRendering.toplevelSection, (req, res) => {
          */
         let files = [
             fs.readFile(`${helpers.getSourceFolder()}/modules/common/views/partials/header.partial.html`),
-            fs.readFile(`${helpers.getSourceFolder()}/modules/pages/${req.item}/views/${req.item}.html`),
+            fs.readFile(`${helpers.getSourceFolder()}/modules/pages/loader/loader.html`),
             fs.readFile(`${helpers.getSourceFolder()}/modules/common/views/partials/footer.partial.html`)
         ];
 

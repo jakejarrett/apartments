@@ -27,7 +27,12 @@ class ComponentController extends Marionette.Object {
      * @returns {boolean} True if the element is registered.
      */
     isRegistered (name) {
-        return document.createElement(name).constructor !== HTMLElement;
+        let el = document.createElement(name);
+        if (el.constructor !== HTMLElement) {
+            return el;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -40,34 +45,32 @@ class ComponentController extends Marionette.Object {
      * @public
      */
     register (componentName, component, properties) {
+        let ComponentModule = new component(componentName, properties);
+
         /**
          * If it's registered already, return the registered one
          */
-        if(this.isRegistered(componentName)) {
-            return document.createElement(componentName);
+        const isRegistered = this.isRegistered(componentName);
+        if(isRegistered !== false) {
+            return isRegistered;
         }
-
-        let ComponentModule = new component(componentName);
 
         /**
          * Create a prototype of our component, otherwise it will throw errors.
          */
-        let Component = document.registerElement(componentName, {
-            prototype: Object.create(ComponentModule.prototype)
-        });
+        let Component = document.registerElement(componentName, ComponentModule.element);
 
-        let elem = new Component;
+        const elem = new Component;
+
+        ComponentModule.element = elem;
 
         if(!(CustomElements.useNative)) {
             WebComponents.ShadowCSS.shimStyling(elem.shadowRoot, `${componentName}`);
         }
 
-        if(undefined !== properties) {
-            elem.properties = properties;
-        }
-
         this.__components[componentName] = {
             component: elem,
+            componentModule: ComponentModule,
             elementName: componentName,
             radioChannel: elem.radio
         };

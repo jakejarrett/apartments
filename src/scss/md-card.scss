@@ -1,0 +1,312 @@
+
+// SETTINGS
+// ########################################
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,700,300);
+$cta-color: #FF1744;
+
+// MIXINS
+//########################################
+
+// z-depth official shadows
+// (https://www.polymer-project.org/components/paper-elements/demo.html#paper-shadow)
+
+.z-1 { box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37); }
+.z-2 { box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.3), 0 2px 2px 0 rgba(0, 0, 0, 0.2); }
+.z-3 { box-shadow: 0 13px 25px 0 rgba(0, 0, 0, 0.3), 0 11px 7px 0 rgba(0, 0, 0, 0.19); }
+.z-4 { box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.3), 0 14px 12px 0 rgba(0, 0, 0, 0.17); }
+.z-5 { box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3), 0 17px 17px 0 rgba(0, 0, 0, 0.15); }~
+
+
+// BASIC STYLE
+//########################################
+
+:root {
+
+  &.bg--big {
+  background-color: #00BCD4; }
+
+  &.bg--medium {
+  background-color: #E53935; }
+
+  &.bg--small {
+  background-color: #4527A0; }
+}
+
+// button reset
+button {
+  border: none;
+  background: transparent;
+}
+
+
+// DEFAULT CARD AND ELEMENTS
+//########################################
+
+// basic card block
+.md-card {
+  display: inline-block;
+  will-change: transform;
+  position: relative;
+  border-radius: 2px;
+  overflow:  hidden;
+  background-color: #fafafa;
+  height: 35%;
+  @extend .z-1;
+
+  @media screen and (min-width: 993px) {
+    width: calc(50% - 16px);
+    margin-left: 8px;
+  }
+
+  @media screen and (max-width: 992px) {
+    width: 100%;
+  }
+
+  &__image {
+    position: absolute;
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: block;
+    opacity: 0;
+
+    // image overlay
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      background-color: rgba(0,0,0,0.1);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  &__title {
+    user-select: none;
+    font-size: 24px;
+    color: #FFF;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 0 16px;
+    font-weight: 400;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  &__subtitle {
+    user-select: none;
+    font-size: 14px;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #000;
+    left: 88px;
+    right: 0;
+    top: 45px;
+    position: absolute;
+    padding: 0 16px;
+    opacity: 0;
+  }
+
+  &__text {
+    user-select: none;
+    font-size: 14px;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 100px;
+    padding: 16px;
+    margin: 0;
+    line-height: 1.6;
+    position: absolute;
+    color: #000;
+    overflow: hidden;
+  }
+
+  &__action-bar {
+    user-select: none;
+    position: absolute;
+    bottom: 0;
+    top: auto;
+    left: 0;
+    right: 0;
+    padding: 0 8px;
+    border-top: 1px solid #E0E0E0;
+    box-sizing: border-box;
+    height: 52px;
+  }
+
+  &__button {
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    display: inline-block;
+    line-height: 52px;
+    padding: 0 16px;
+    color: $cta-color;
+
+    &:hover {
+      background: darken(white, 10%);
+    }
+  }
+
+  &--big {
+    @extend .z-5;
+    height: 304px;
+    min-height: 304px;
+
+    .md-card {
+      // image element
+      &__image {
+        border-radius: 1px 1px 0 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        opacity: 1;
+        max-height: 176px;
+      }
+
+      // title element
+      &__title {
+        top: 135px;
+      }
+
+      // text element
+      &__text {
+        top: 176px;
+      }
+
+      &__action-bar {
+        left: 0;
+      }
+    }
+  }
+
+  &--medium {
+    @extend .z-3;
+    height: 208px;
+    min-height: 208px;
+
+    .md-card {
+      // image element
+      &__image {
+        border-radius: 1px 1px 0 0;
+        left: -100%;
+        right: 0;
+        top: 0;
+        max-height: 0;
+        opacity: 0;
+      }
+
+      // title element
+      &__title {
+        color: $cta-color;
+        top: 16px;
+      }
+    }
+
+
+    // text element
+    .md-card__text {
+      font-size: 16px;
+      top: 50px; }
+
+
+    .md-card__action-bar {
+      left: 0; }
+  }
+
+  &--small {
+    @extend .z-2;
+    height: 136px;
+    min-height: 136px;
+
+    // image element
+    .md-card {
+      &__image {
+        border-radius: 1px 0 0 1px;
+        left: 0;
+        top: 0;
+        width: 88px;
+        opacity: 1;
+        max-height: 136px;
+
+        // image overlay
+        &:after {
+          opacity: 0;
+        }
+      }
+
+      &__title {
+        color: #000;
+        left: 88px;
+        top: 8px;
+      }
+
+      &__subtitle {
+        opacity: 1;
+        left: 88px;
+      }
+
+      &__text {
+        top: 30px;
+        opacity: 0;
+      }
+
+      &__action-bar {
+        left: 88px;
+      }
+    }
+  }
+
+  @media screen and (min-width: 993px) {
+    &--expanded {
+      $expandBy: 74px;
+
+      width: calc(100% - 19px);
+      height: 400px;
+      min-height: 400px;
+
+      .md-card {
+
+        // title element
+        &__title {
+          transform: translateY($expandBy);
+        }
+
+        &__text {
+          transform: translateY($expandBy);
+        }
+
+        &__image {
+          max-height: 250px;
+          background-position: center;
+        }
+
+        &__learnMore {
+          background: darken(white, 10%);
+        }
+        
+      }
+    }
+  }
+}
+
+.fa {
+  &:after {
+    font-family: emoji;
+    content: "🗺 ";
+    padding-right:10px;
+  }
+}

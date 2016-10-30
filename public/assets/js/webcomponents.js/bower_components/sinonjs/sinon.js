@@ -5785,7 +5785,7 @@ if (typeof sinon === "undefined") {
  * @depend util/fake_server_with_clock.js
  */
 /**
- * Manages fake collections as well as fake utilities such as Sinon's
+ * Manages fake models as well as fake utilities such as Sinon's
  * timers and fake XHR implementation in one convenient object.
  *
  * @author Christian Johansen (christian@cjohansen.no)

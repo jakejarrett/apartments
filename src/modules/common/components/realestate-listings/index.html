@@ -6,6 +6,7 @@
         } else {
             price = "N/A";
         }
+
     %>
     <div class="md-card md-card--big">
         <div style="background-image: url(<%- property.mainImage.server + '/800x600' + property.mainImage.uri %>)" class="md-card__image"></div>
@@ -15,7 +16,7 @@
         </p>
         <div class="md-card__action-bar">
             <button class="md-card__button">SHARE</button>
-            <button class="md-card__button md-card__learnMore" onclick="this.parentNode.parentNode.classList.toggle('md-card--expanded')">LEARN MORE</button>
+            <button class="md-card__button md-card__learnMore">LEARN MORE</button>
         </div>
     </div>
 <% }); %>

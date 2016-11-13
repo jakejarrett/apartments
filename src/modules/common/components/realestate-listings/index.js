@@ -11,14 +11,8 @@ class RealEstateListingsComponent extends Component {
      * Setup our component.
      */
     constructor (elementName, props) {
-        let data = {
-            properties: props
-        };
-
-        const renderedTemplate = _.template(Template)(data);
-
-        super(elementName, renderedTemplate, Styles);
-
+        super(elementName);
+        this.render(elementName, props);
         this.properties = props;
 
         return this;
@@ -35,14 +29,25 @@ class RealEstateListingsComponent extends Component {
         this.element.updateElement(renderedTemplate, Styles);
     }
 
+    render (elementName, props) {
+        let that = this;
+        let data = {
+            properties: props
+        };
+
+        const renderedTemplate = _.template(Template)(data);
+
+        this.renderComponent(elementName, renderedTemplate, Styles);
+    }
+
     /**
      * When the user clicks the element, console log "hello" and the click event.
      *
      * @param event {Event} The click event.
      */
-    @on("click")
+    @on("click button")
     onUserClick (event) {
-        console.log(this.properties)
+        console.log(event);
     }
 }
 
